@@ -1,14 +1,16 @@
 import telebot
 import pyowm
 from datetime import datetime
-
+from keep_alive import make_keep_alive
 from pyowm.utils.config import get_default_config
 from pyowm.commons import exceptions as exc
 
-bot = telebot.TeleBot('your_api')
+bot = telebot.TeleBot('1028964503:AAHnmXie45UuSSdPzOk8WwWDo6JQojuCOVo')
+print("Connected with Telegram")
 config_dict = get_default_config()
 config_dict['language'] = 'ru'
-owm = pyowm.OWM('your_api', config_dict)
+owm = pyowm.OWM('1ee6c77753006e90884a66184101b7b4', config_dict)
+print("Connected with PYOWM")
 
 
 def inf (message):
@@ -23,7 +25,7 @@ def inf (message):
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
-	stick = open ('files\AnimatedSticker.tgs','rb')
+	stick = open ('AnimatedSticker.tgs','rb')
 	bot.send_sticker (message.chat.id, stick)
 	bot.send_message (message.chat.id, "Привет, <b>{0.first_name}</b>!\nЯ <b>{1.first_name}</b>, бот, который еще в процессе разработки!\nВведи название города, и я подскажу погоду на сегодня: ".format(message.from_user,bot.get_me()),parse_mode ="html" )
 	inf(message)
@@ -48,4 +50,9 @@ def send (message):
 	except exc.APIResponseError:
 		bot.send_message (message.chat.id, "Такого города не существует.")
 		inf(message)
+print("Running")
+make_keep_alive()
 bot.polling(none_stop = True)
+
+
+
