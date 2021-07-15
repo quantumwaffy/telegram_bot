@@ -46,7 +46,6 @@ def send(message):
     bot.send_message(
         message.chat.id,
         "Введи название города, и я подскажу погоду на сегодня: ",
-        parse_mode="html",
     )
 
     @bot.message_handler(content_types=["text"])
@@ -85,15 +84,19 @@ def send(message):
 @bot.message_handler(commands=["banks"])
 def currencies_information(message):
     cities = [{text[1]: str(ident)} for ident, text in CITIES.items()]
-    kb_cities = keyboa_maker(items=cities, items_in_row=3, copy_text_to_callback=True)
+    kb_cities = keyboa_maker(items=cities, items_in_row=3)
     bot.send_message(
         message.chat.id,
-        "Выбери город РБ, я поищу акутальные курсы обмена валют на сегодня: ",
-        parse_mode="html",
         reply_markup=kb_cities,
+        text="Выбери город РБ, я поищу акутальные курсы обмена валют на сегодня: ",
     )
-
     inf(message)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def key_callback(call):
+    if call.data == "3":
+        print(call.data)
 
 
 print("Running")
