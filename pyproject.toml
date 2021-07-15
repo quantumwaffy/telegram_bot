@@ -9,6 +9,10 @@ python = "^3.8"
 pyowm = "^3.1.1"
 pyTelegramBotAPI = "^3.8.1 "
 flask = "^1.1.2"
+beautifulsoup4 = "4.9.3"
+lxml="4.6.3"
+keyboa="3.0.1"
+
 
 [tool.poetry.dev-dependencies]
 
