@@ -7,8 +7,9 @@ authors = ["repl.it user <replituser@example.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 pyowm = "^3.1.1"
-pyTelegramBotAPI = "^0.3.0"
+pyTelegramBotAPI = "*"
 flask = "^1.1.2"
+pre-commit = "^2.13.0"
 
 [tool.poetry.dev-dependencies]
 
