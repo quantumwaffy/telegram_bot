@@ -4,12 +4,13 @@ from datetime import datetime
 from keep_alive import make_keep_alive
 from pyowm.utils.config import get_default_config
 from pyowm.commons import exceptions as exc
+from . import tokens
 
-bot = telebot.TeleBot('1028964503:AAHnmXie45UuSSdPzOk8WwWDo6JQojuCOVo')
+bot = telebot.TeleBot(tokens.telegram_token)
 print("Connected with Telegram")
 config_dict = get_default_config()
 config_dict['language'] = 'ru'
-owm = pyowm.OWM('1ee6c77753006e90884a66184101b7b4', config_dict)
+owm = pyowm.OWM(tokens.pyowm_token, config_dict)
 print("Connected with PYOWM")
 
 

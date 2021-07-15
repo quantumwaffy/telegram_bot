@@ -1,1 +1,1 @@
-# telegrambot_1
+#Telegram bot that displays weather conditions at a given location. The bot records information about the user and his requests to form a "white" and "black" list, and also performs notifications at a specified time for users in a frequently requested city. It works on pythonanywhere.com 
