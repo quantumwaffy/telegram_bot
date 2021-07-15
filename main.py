@@ -30,13 +30,13 @@ def inf(message):
 def welcome(message):
     with open("AnimatedSticker.tgs", "rb") as f:
         bot.send_sticker(message.chat.id, f)
-        bot.send_message(
-            message.chat.id,
-            f"Привет, <b>{message.from_user.first_name}</b>!\nЯ <b>{bot.get_me().first_name}"
-            f"</b>, бот, который еще в процессе разработки!\nВведи название города, и я подскажу погоду на сегодня: ",
-            parse_mode="html",
-        )
-        inf(message)
+    bot.send_message(
+        message.chat.id,
+        f"Привет, <b>{message.from_user.first_name}</b>!\nЯ <b>{bot.get_me().first_name}"
+        f"</b>, бот, который еще в процессе разработки!\nВведи название города, и я подскажу погоду на сегодня: ",
+        parse_mode="html",
+    )
+    inf(message)
 
 
 @bot.message_handler(content_types=["text"])
