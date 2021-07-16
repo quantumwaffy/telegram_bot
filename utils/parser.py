@@ -1,16 +1,8 @@
-import requests
+import os
+
 from bs4 import BeautifulSoup, NavigableString
 
-SOURCE = "https://myfin.by/currency/"
-
-CITIES = {
-    "1": ("minsk", "Минск"),
-    "2": ("brest", "Брест"),
-    "3": ("vitebsk", "Витебск"),
-    "4": ("gomel", "Гомель"),
-    "5": ("grodno", "Гродно"),
-    "6": ("mogilev", "Могилев"),
-}
+from keep_alive import CACHE_DIR, CITIES, WORK_DIR
 
 PROPOSAL = (
     ("usd_buy", "best_usd_buy"),
@@ -27,12 +19,7 @@ PROPOSAL = (
 def make_soup(data):
     city = CITIES.get(data)[0]
     if city:
-        file = "temporary_" + city + ".html"
-        url = SOURCE + city
-        response = requests.get(url, headers={"User-agent": "your bot 0.1"})
-        with open(file, "w") as f:
-            f.write(str(BeautifulSoup(response.text, "lxml")))
-            print(url)
+        file = os.path.join(WORK_DIR, CACHE_DIR, "temporary_" + city + ".html")
         return file
 
 
