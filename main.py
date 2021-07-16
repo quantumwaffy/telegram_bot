@@ -120,9 +120,14 @@ def currencies_information(message):
                 )
         else:
             chosen_dict_info = user_input(call.data, result_list)
-            text_message = ""
+            text_message = (
+                "".join(text for el in choices for text, ident in el.items() if ident == call.data)
+                .split("Узнать ")[1]
+                .upper()
+                + ":\n"
+            )
             for bank, currencies in chosen_dict_info.items():
-                text_message += bank + ":\n"
+                text_message += "\n" + bank + ":\n"
                 for kind, value in currencies.items():
                     text_message += kind + ": " + value + "\n"
 
