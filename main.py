@@ -8,7 +8,7 @@ from telebot import TeleBot
 
 from keep_alive import make_keep_alive
 from local_tokens import pyowm_token, telegram_token
-from utils.parser import CITIES
+from utils.parser import CITIES, make_soup, parsing_soup, user_input
 
 bot = TeleBot(telegram_token)
 print("Connected with Telegram")
@@ -83,20 +83,50 @@ def send(message):
 
 @bot.message_handler(commands=["banks"])
 def currencies_information(message):
-    cities = [{text[1]: str(ident)} for ident, text in CITIES.items()]
+    cities = [{text[1]: ident} for ident, text in CITIES.items()]
     kb_cities = keyboa_maker(items=cities, items_in_row=3)
     bot.send_message(
         message.chat.id,
         reply_markup=kb_cities,
         text="Выбери город РБ, я поищу акутальные курсы обмена валют на сегодня: ",
     )
-    inf(message)
+    result_list = []
 
+    @bot.callback_query_handler(func=lambda call: True)
+    def callback(call):
+        choices = [
+            {"1) Узнать все курсы валют": "c1"},
+            {"2) Узнать банки с лучшим курсом валют": "c2"},
+            {"3) Узнать лучший курс покупки $": "c3"},
+            {"4) Узнать лучший курс продажи $": "c4"},
+            {"5) Узнать лучший курс покупки €": "c5"},
+            {"6) Узнать лучший курс продажи €": "c6"},
+            {"7) Узнать лучший курс покупки ₽": "c7"},
+            {"8) Узнать лучший курс продажи ₽": "c8"},
+            {"9) Узнать лучший курс покупки $ c €": "c9"},
+            {"10) Узнать лучший курс продажи $ c €": "c10"},
+        ]
+        if "c" not in call.data:
+            file = make_soup(call.data)
+            list_dicts = parsing_soup(file)
+            result_list.extend(list_dicts)
 
-@bot.callback_query_handler(func=lambda call: True)
-def key_callback(call):
-    if call.data == "3":
-        print(call.data)
+            if list_dicts:
+                kb_choices = keyboa_maker(items=choices, items_in_row=1)
+                bot.send_message(
+                    message.chat.id,
+                    reply_markup=kb_choices,
+                    text="Выбери то, что ты хочешь узнать: ",
+                )
+        else:
+            chosen_dict_info = user_input(call.data, result_list)
+            text_message = ""
+            for bank, currencies in chosen_dict_info.items():
+                text_message += bank + ":\n"
+                for kind, value in currencies.items():
+                    text_message += kind + ": " + value + "\n"
+
+            bot.send_message(message.chat.id, text=text_message)
 
 
 print("Running")
